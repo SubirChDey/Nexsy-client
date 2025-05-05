@@ -1,10 +1,14 @@
 import { NavLink, Outlet } from "react-router-dom";
 
 const Dashboard = () => {
+    const isAdmin = true;
+    const isModerator = false;
+    const isUser = false;
+
     return (
         <div className="drawer lg:drawer-open">
             <input id="dashboard-drawer" type="checkbox" className="drawer-toggle" />
-            
+
             <div className="drawer-content flex flex-col">
                 <label htmlFor="dashboard-drawer" className="btn btn-primary drawer-button lg:hidden m-4">
                     Open Menu
@@ -20,15 +24,45 @@ const Dashboard = () => {
                         <p>All-in-One Dashboard for Tech Product Launches</p>
                     </div>
                     <ul className="menu p-4">
-                        <li>
-                            <NavLink to={'/dashboard/userProfile'}>My Profile</NavLink>
-                        </li>
-                        <li>
-                            <NavLink to={'/dashboard/addProduct'}>Add Product</NavLink>
-                        </li>
-                        <li>
-                            <NavLink to={'/dashboard/myProducts'}>My Products</NavLink>
-                        </li>
+                        {
+                            isAdmin ? <>
+                                <li>
+                                    <NavLink to={'/dashboard/statistics'}>Statistics</NavLink>
+                                </li>
+                                <li>
+                                    <NavLink to={'/dashboard/manageUsers'}>Manage Users</NavLink>
+                                </li>
+                                <li>
+                                    <NavLink to={'/dashboard/manageCoupons'}>Manage Coupons</NavLink>
+                                </li>
+                            </> :
+                                <></>
+                        }
+                        {
+                            isModerator ? <>
+                                <li>
+                                    <NavLink to={'/dashboard/productQueue'}>Product Review Queue</NavLink>
+                                </li>
+                                <li>
+                                    <NavLink to={'/dashboard/reported'}>Reported Contents</NavLink>
+                                </li>
+                            </> :
+                                <></>
+                        }
+                        {
+                            isUser ? <>
+                                <li>
+                                    <NavLink to={'/dashboard/userProfile'}>My Profile</NavLink>
+                                </li>
+                                <li>
+                                    <NavLink to={'/dashboard/addProduct'}>Add Product</NavLink>
+                                </li>
+                                <li>
+                                    <NavLink to={'/dashboard/myProducts'}>My Products</NavLink>
+                                </li>
+                            </> :
+                                <></>
+                        }
                     </ul>
                     <div className="divider"></div>
                     <ul className="menu p-4">

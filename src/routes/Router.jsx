@@ -9,6 +9,7 @@ import UserProfile from "../pages/Dashboard/UserDashboard/UserProfile";
 import AddProduct from "../pages/Dashboard/UserDashboard/AddProduct";
 import MyProducts from "../pages/Dashboard/UserDashboard/MyProducts";
 import Products from "../pages/Products/Products";
+import ManageUsers from "../pages/Dashboard/AdminDashboard/ManageUsers";
 
 
 const router = createBrowserRouter([
@@ -39,6 +40,14 @@ const router = createBrowserRouter([
       path: 'dashboard',
       element: <Dashboard></Dashboard>,
       children: [
+
+        // Admin Routs
+        {
+          path: '/dashboard/manageUsers',
+          element: <ManageUsers></ManageUsers>
+        },
+
+        
         {
           path: '/dashboard/user',
           element: <UserProfile></UserProfile>,
