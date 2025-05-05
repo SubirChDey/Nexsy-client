@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, updateProfile } from "firebase/auth";
 import app from "../firebase/firebase.config";
-// import axios from "axios";
+import axios from "axios";
 
 export const AuthContext = createContext();
 const auth = getAuth(app);
@@ -57,31 +57,32 @@ const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-            setUser(currentUser);
-            setLoading(false);
-            // if (currentUser?.email) {
-            //     setUser(currentUser);
-            //     const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/jwt`, {
-            //         email: currentUser?.email
-            //     },
-            //         { withCredentials: true })               
-            //     setLoading(false);
-            // }
-            // else {
-            //     // setUser(currentUser);
-            //     const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/logout`,
-            //         { withCredentials: true })
-            //         setLoading(false);
-            // }
-
+            // setUser(currentUser);
+            // setLoading(false);
+            if (currentUser?.email) {
+                setUser(currentUser);
+                const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/jwt`, {
+                    email: currentUser?.email
+                },
+                    { withCredentials: true })               
+                setLoading(false);
+            }
+            else {
+                // setUser(currentUser);
+                const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/logout`,
+                    { withCredentials: true })
+                    setLoading(false);
+            }
 
         });
+
         return () => {
             unsubscribe();
         }
 
     }, [])
 
+    
     return <AuthContext.Provider value={authInfo}>
         {children}
     </AuthContext.Provider>

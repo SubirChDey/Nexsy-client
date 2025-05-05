@@ -6,8 +6,10 @@ import { Link, useLocation, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { AuthContext } from "../../providers/AuthProvider";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const Registration = () => {
+    const axiosPublic = useAxiosPublic();
     const { createNewUser, setUser, googleLogin, manageProfile } = useContext(AuthContext);
     const [showPassword, setShowPassword] = useState(false);
     const location = useLocation();
@@ -37,14 +39,26 @@ const Registration = () => {
                 const user = result.user;
                 manageProfile(name, photo);
                 setUser(user);
-                Swal.fire({
-                    position: "top-center",
-                    icon: "success",
-                    title: "Registration Successfull",
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-                navigate(location?.state ? location.state : '/');
+                console.log(user);
+                const userInfo = {
+                    name: name,
+                    email: email,
+                    role: 'user',
+                }
+                axiosPublic.post('/users', userInfo)
+                .then(res => {                    
+                    if(res.data.insertedId) {                        
+                        Swal.fire({
+                            position: "top-center",
+                            icon: "success",
+                            title: "Registration Successfull",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        navigate(location?.state ? location.state : '/');
+                        
+                    }
+                })                
             })
             // .catch(error => toast.error('Input valid login info'));
 

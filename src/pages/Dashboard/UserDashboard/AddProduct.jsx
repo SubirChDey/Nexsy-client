@@ -1,22 +1,22 @@
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { WithContext as ReactTags } from "react-tag-input";
-import { toast } from "react-hot-toast";
 import { AuthContext } from "../../../providers/AuthProvider";
+import { toast } from "react-toastify";
 
 const AddProduct = () => {
   const { user } = useContext(AuthContext); // user contains name, email, image
-  if (!user) {
-    return <div>Loading user data...</div>;
-  }
-  console.log(user)
-  const navigate = useNavigate();
-
+   const navigate = useNavigate();
   const [productName, setProductName] = useState("");
   const [productImage, setProductImage] = useState("");
   const [description, setDescription] = useState("");
   const [externalLink, setExternalLink] = useState("");
   const [tags, setTags] = useState([]);
+
+  if (!user) {
+    return <div>Loading user data...</div>;
+  }
+  console.log(user)
 
   const KeyCodes = {
     comma: 188,
@@ -48,12 +48,12 @@ const AddProduct = () => {
       tags: tags.map((tag) => tag.text),
       ownerName: user.displayName,
       ownerEmail: user.email,
-      ownerImage: user.displayURL,
+      ownerImage: user.photoURL,
       createdAt: new Date(),
     };
 
     try {
-      const res = await fetch("/api/products", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/products`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -63,7 +63,7 @@ const AddProduct = () => {
 
       if (res.ok) {
         toast.success("Product added successfully!");
-        navigate("/my-products");
+        navigate("/dashboard/myProducts");
       } else {
         toast.error("Failed to add product.");
       }
