@@ -6,11 +6,12 @@ import Swal from "sweetalert2";
 
 
 import { AuthContext } from "../../providers/AuthProvider";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 
 
 const Login = () => {
-
+const axiosPublic = useAxiosPublic()
     const [showPassword, setShowPassword] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
@@ -55,19 +56,29 @@ const Login = () => {
     };
 
     const handleGoogleLogin = () => {
-       googleLogin()        
-            .then(() => {
-                Swal.fire({
-                    position: "top-center",
-                    icon: "success",
-                    title: "Login Successfully",
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-                navigate(location?.state ? location.state : '/');
-            })
-            // .catch(error => toast.error('Login Failed'));
-    };
+            googleLogin()
+                .then((result) => {
+                    const userInfo = {
+                        email: result.user?.email,
+                        name: result.user?.displayName,
+                        role: 'user',
+                    }
+                    axiosPublic.post('/users', userInfo)
+                        .then(res => {
+                            console.log(res.data);
+                            Swal.fire({
+                                position: "top-center",
+                                icon: "success",
+                                title: "Registration Successfull",
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                            navigate(location?.state ? location.state : '/');
+                        })
+    
+                })
+                .catch(error => toast.error(error.message));
+        };
 
     return (
         <div>

@@ -33,7 +33,7 @@ const Registration = () => {
             return;
         }
 
-      
+
         createNewUser(email, password)
             .then(result => {
                 const user = result.user;
@@ -46,8 +46,35 @@ const Registration = () => {
                     role: 'user',
                 }
                 axiosPublic.post('/users', userInfo)
-                .then(res => {                    
-                    if(res.data.insertedId) {                        
+                    .then(res => {
+                        if (res.data.insertedId) {
+                            Swal.fire({
+                                position: "top-center",
+                                icon: "success",
+                                title: "Registration Successfull",
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                            navigate(location?.state ? location.state : '/');
+
+                        }
+                    })
+            })
+        // .catch(error => toast.error('Input valid login info'));
+
+    }
+
+    const handleGoogleLogin = () => {
+        googleLogin()
+            .then((result) => {
+                const userInfo = {
+                    email: result.user?.email,
+                    name: result.user?.displayName,
+                    role: 'user',
+                }
+                axiosPublic.post('/users', userInfo)
+                    .then(res => {
+                        console.log(res.data);
                         Swal.fire({
                             position: "top-center",
                             icon: "success",
@@ -56,25 +83,8 @@ const Registration = () => {
                             timer: 1500
                         });
                         navigate(location?.state ? location.state : '/');
-                        
-                    }
-                })                
-            })
-            // .catch(error => toast.error('Input valid login info'));
+                    })
 
-    }
-
-    const handleGoogleLogin = () => {
-        googleLogin()
-            .then(() => {
-                Swal.fire({
-                    position: "top-center",
-                    icon: "success",
-                    title: "Registration Successfull",
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-                navigate(location?.state ? location.state : '/');
             })
             .catch(error => toast.error(error.message));
     };
