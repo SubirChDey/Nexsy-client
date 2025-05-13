@@ -81,31 +81,45 @@ const ManageUsers = () => {
                                 <td className="p-3">{user.name}</td>
                                 <td className="p-3">{user.email}</td>
                                 <td className="p-3">
-                                    <button
-                                        onClick={() => handleRoleUpdate(user._id, "moderator")}
-                                        className={`px-3 py-1 rounded flex items-center gap-1 justify-center transition ${user.role === "moderator"
-                                                ? "bg-blue-200 text-blue-700 cursor-not-allowed"
-                                                : "bg-blue-500 hover:bg-blue-600 text-white"
-                                            }`}
-                                        disabled={user.role === "moderator"}
-                                    >
-                                        <FaUserCog />
-                                        {user.role === "moderator" ? "Moderator" : "Make"}
-                                    </button>
+                                    {user.role === "moderator" ? (
+                                        <button
+                                            onClick={() => handleRoleUpdate(user._id, "user")}
+                                            className="bg-yellow-200 hover:bg-yellow-300 text-yellow-800 px-3 py-1 rounded flex items-center gap-1 justify-center transition cursor-pointer"
+                                        >
+                                            <FaUserCog />
+                                            Remove Moderator
+                                        </button>
+                                    ) : (
+                                        <button
+                                            onClick={() => handleRoleUpdate(user._id, "moderator")}
+                                            className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded flex items-center gap-1 justify-center transition cursor-pointer"
+                                        >
+                                            <FaUserCog />
+                                            Make Moderator
+                                        </button>
+                                    )}
                                 </td>
+
                                 <td className="p-3">
-                                    <button
-                                        onClick={() => handleRoleUpdate(user._id, "admin")}
-                                        className={`px-3 py-1 rounded flex items-center gap-1 justify-center transition ${user.role === "admin"
-                                                ? "bg-green-200 text-green-700 cursor-not-allowed"
-                                                : "bg-green-500 hover:bg-green-600 text-white"
-                                            }`}
-                                        disabled={user.role === "admin"}
-                                    >
-                                        <FaUserShield />
-                                        {user.role === "admin" ? "Admin" : "Make"}
-                                    </button>
+                                    {user.role === "admin" ? (
+                                        <button
+                                            onClick={() => handleRoleUpdate(user._id, "user")}
+                                            className="bg-yellow-200 hover:bg-yellow-300 text-yellow-800 px-3 py-1 rounded flex items-center gap-1 justify-center transition cursor-pointer"
+                                        >
+                                            <FaUserShield />
+                                            Remove Admin
+                                        </button>
+                                    ) : (
+                                        <button
+                                            onClick={() => handleRoleUpdate(user._id, "admin")}
+                                            className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded flex items-center gap-1 justify-center transition cursor-pointer"
+                                        >
+                                            <FaUserShield />
+                                            Make Admin
+                                        </button>
+                                    )}
                                 </td>
+
                                 <td className="p-3">
                                     <button
                                         onClick={() => handleDeleteUser(user)}

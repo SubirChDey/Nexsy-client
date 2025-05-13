@@ -5,7 +5,6 @@ import Home from "../pages/Home/Home/Home";
 import Registration from "../pages/Registration/Registration";
 import Login from "../pages/Login/Login";
 import Dashboard from "../layouts/Dashboard";
-import UserProfile from "../pages/Dashboard/UserDashboard/UserProfile";
 import AddProduct from "../pages/Dashboard/UserDashboard/AddProduct";
 import MyProducts from "../pages/Dashboard/UserDashboard/MyProducts";
 import Products from "../pages/Products/Products";
@@ -14,6 +13,7 @@ import Statistics from "../pages/Dashboard/AdminDashboard/Statistics";
 import ManageCoupons from "../pages/Dashboard/AdminDashboard/ManageCoupons";
 import ProductReviewQueue from "../pages/Dashboard/ModeratorDashboard/ProductReviewQueue";
 import ReportedContents from "../pages/Dashboard/ModeratorDashboard/ReportedContents";
+import MyProfile from "../pages/Dashboard/UserDashboard/MyProfile";
 
 
 const router = createBrowserRouter([
@@ -74,7 +74,7 @@ const router = createBrowserRouter([
         // User Routes
         {
           path: '/dashboard/userProfile',
-          element: <UserProfile></UserProfile>,
+          element: <MyProfile></MyProfile>,
         },
         {
           path: '/dashboard/addProduct',

@@ -5,8 +5,9 @@ import { AuthContext } from "../../../providers/AuthProvider";
 import { toast } from "react-toastify";
 
 const AddProduct = () => {
-  const { user } = useContext(AuthContext); // user contains name, email, image
-   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
   const [productName, setProductName] = useState("");
   const [productImage, setProductImage] = useState("");
   const [description, setDescription] = useState("");
@@ -14,9 +15,8 @@ const AddProduct = () => {
   const [tags, setTags] = useState([]);
 
   if (!user) {
-    return <div>Loading user data...</div>;
+    return <div className="text-center mt-10 text-gray-500">Loading user data...</div>;
   }
-  console.log(user)
 
   const KeyCodes = {
     comma: 188,
@@ -25,7 +25,7 @@ const AddProduct = () => {
   const delimiters = [KeyCodes.comma, KeyCodes.enter];
 
   const handleDelete = (i) => {
-    setTags(tags.filter((tag, index) => index !== i));
+    setTags(tags.filter((_, index) => index !== i));
   };
 
   const handleAddition = (tag) => {
@@ -74,16 +74,16 @@ const AddProduct = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-4">
-      <h2 className="text-2xl font-semibold mb-4">Add New Product</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="max-w-3xl mx-auto px-6 py-10 bg-white rounded-xl shadow-md mt-8">
+      <h2 className="text-3xl font-bold text-indigo-700 mb-6 text-center">Add New Product</h2>
+      <form onSubmit={handleSubmit} className="space-y-6">
+
         <input
           type="text"
           placeholder="Product Name *"
           value={productName}
           onChange={(e) => setProductName(e.target.value)}
-          required
-          className="w-full border p-2 rounded"
+          className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
 
         <input
@@ -91,48 +91,43 @@ const AddProduct = () => {
           placeholder="Product Image URL *"
           value={productImage}
           onChange={(e) => setProductImage(e.target.value)}
-          required
-          className="w-full border p-2 rounded"
+          className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
 
         <textarea
           placeholder="Product Description *"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          required
-          className="w-full border p-2 rounded"
+          rows={4}
+          className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
 
-        <div className="flex justify-between items-center">
-          <div className="gap-4 justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="flex-1">
             <input
               type="text"
               value={user.displayName}
               disabled
-              className="w-full border p-2 rounded bg-gray-100 mb-4"
+              className="w-full border border-gray-300 p-3 rounded-lg bg-gray-100 text-gray-600"
             />
             <input
               type="email"
               value={user.email}
               disabled
-              className="w-full border p-2 rounded bg-gray-100"
+              className="w-full border border-gray-300 p-3 mt-3 rounded-lg bg-gray-100 text-gray-600"
             />
           </div>
-          {/* <input
-            type="text"
-            value={user.photoURL}
-            disabled
-            className="w-full border p-2 rounded bg-gray-100"
-          /> */}
-          <img
-            src={user.photoURL}
-            alt="User"
-            className="w-16 h-16 rounded-full border"
-          />
+          <div className="shrink-0 self-start sm:self-auto">
+            <img
+              src={user.photoURL}
+              alt="User"
+              className="w-20 h-20 rounded-full border-4 border-indigo-500 shadow-md"
+            />
+          </div>
         </div>
 
         <div>
-          <label className="block mb-1 font-medium">Tags</label>
+          <label className="block mb-2 text-sm font-medium text-gray-700">Tags</label>
           <ReactTags
             tags={tags}
             delimiters={delimiters}
@@ -140,6 +135,11 @@ const AddProduct = () => {
             handleAddition={handleAddition}
             inputFieldPosition="bottom"
             placeholder="Add a tag"
+            classNames={{
+              tagInput: "border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500",
+              tag: "bg-indigo-100 text-indigo-700 px-2 py-1 rounded mr-2 mt-1 inline-block",
+              remove: "ml-2 text-red-500 cursor-pointer",
+            }}
           />
         </div>
 
@@ -148,14 +148,14 @@ const AddProduct = () => {
           placeholder="External Link (optional)"
           value={externalLink}
           onChange={(e) => setExternalLink(e.target.value)}
-          className="w-full border p-2 rounded"
+          className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
 
         <button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          className="w-full bg-indigo-600 text-white py-3 rounded-lg font-medium hover:bg-indigo-700 transition duration-200"
         >
-          Submit
+          Submit Product
         </button>
       </form>
     </div>
