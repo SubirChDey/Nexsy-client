@@ -10,6 +10,10 @@ import AddProduct from "../pages/Dashboard/UserDashboard/AddProduct";
 import MyProducts from "../pages/Dashboard/UserDashboard/MyProducts";
 import Products from "../pages/Products/Products";
 import ManageUsers from "../pages/Dashboard/AdminDashboard/ManageUsers";
+import Statistics from "../pages/Dashboard/AdminDashboard/Statistics";
+import ManageCoupons from "../pages/Dashboard/AdminDashboard/ManageCoupons";
+import ProductReviewQueue from "../pages/Dashboard/ModeratorDashboard/ProductReviewQueue";
+import ReportedContents from "../pages/Dashboard/ModeratorDashboard/ReportedContents";
 
 
 const router = createBrowserRouter([
@@ -41,17 +45,33 @@ const router = createBrowserRouter([
       element: <Dashboard></Dashboard>,
       children: [
 
-        // Admin Routs
+        // Admin Routes
         {
           path: '/dashboard/manageUsers',
           element: <ManageUsers></ManageUsers>
         },
-
-        
         {
-          path: '/dashboard/user',
-          element: <UserProfile></UserProfile>,
+          path: '/dashboard/statistics',
+          element: <Statistics></Statistics>
         },
+        {
+          path: '/dashboard/manageCoupons',
+          element: <ManageCoupons></ManageCoupons>
+        },
+
+        // Moderator Routes       
+        {
+          path: '/dashboard/productQueue',
+          element: <ProductReviewQueue></ProductReviewQueue>,
+        },
+        {
+          path: '/dashboard/reported',
+          element: <ReportedContents></ReportedContents>,
+        },
+
+
+
+        // User Routes
         {
           path: '/dashboard/userProfile',
           element: <UserProfile></UserProfile>,

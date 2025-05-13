@@ -1,66 +1,119 @@
-import { Link } from "react-router-dom"
-import { useContext, useState } from "react"
-import { AuthContext } from "../../../providers/AuthProvider"
-import { FaUserTie } from "react-icons/fa"
+import { NavLink, Link } from "react-router-dom";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../../providers/AuthProvider";
+import { FaUserTie } from "react-icons/fa";
 
 const Navbar = () => {
-    const { user, logOut } = useContext(AuthContext)
+    const { user, logOut } = useContext(AuthContext);
     const [showMenu, setShowMenu] = useState(false);
-
-    const navOptions = <>
-        <li><Link to={'/'}>HOME</Link></li>
-        <li><Link to={'/products'}>PRODUCTS </Link></li>
-        <li><Link>CONTACT US </Link></li>
-        {/* <li><Link>DASHBOARD</Link></li> */}
-    </>
-
     const handleClickOutside = () => setShowMenu(false);
 
+    const navOptions = (
+        <>
+            <li>
+                <NavLink
+                    to="/"
+                    className={({ isActive }) =>
+                        isActive
+                            ? "text-[#3F51B5] font-semibold underline"
+                            : "hover:text-[#009688] transition-colors duration-200"
+                    }
+                >
+                    HOME
+                </NavLink>
+            </li>
+            <li>
+                <NavLink
+                    to="/products"
+                    className={({ isActive }) =>
+                        isActive
+                            ? "text-[#3F51B5] font-semibold underline"
+                            : "hover:text-[#009688] transition-colors duration-200"
+                    }
+                >
+                    PRODUCTS
+                </NavLink>
+            </li>
+            <li>
+                <NavLink
+                    to="/contact"
+                    className={({ isActive }) =>
+                        isActive
+                            ? "text-[#3F51B5] font-semibold underline"
+                            : "hover:text-[#009688] transition-colors duration-200"
+                    }
+                >
+                    CONTACT US
+                </NavLink>
+            </li>
+        </>
+    );
+
     return (
-        <div className="">
-            <div className="navbar bg-base-100 shadow-sm fixed z-50">
+        <div className="bg-[#FAFAFA] shadow-sm fixed w-full z-50 border-b border-[#E0E0E0]">
+            <div className="navbar max-w-7xl mx-auto px-4 py-2">
+                {/* Navbar Start */}
                 <div className="navbar-start">
+                    {/* Mobile Dropdown */}
                     <div className="dropdown">
-                        <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /> </svg>
-                        </div>
+                        <label tabIndex={0} className="btn btn-ghost lg:hidden">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-6 w-6 text-[#212121]"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M4 6h16M4 12h16M4 18h16"
+                                />
+                            </svg>
+                        </label>
                         <ul
                             tabIndex={0}
-                            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+                            className="menu menu-sm dropdown-content mt-3 z-50 p-2 shadow bg-white rounded-box w-52"
+                        >
                             {navOptions}
                         </ul>
                     </div>
-                    <a className="btn btn-ghost text-xl">Nexsy</a>
+
+                    {/* Logo */}
+                    <Link to="/" className="text-2xl font-bold text-[#FF5722] tracking-tight">
+                        Nexsy
+                    </Link>
                 </div>
+
+                {/* Navbar Center */}
                 <div className="navbar-center hidden lg:flex">
-                    <ul className="menu menu-horizontal px-1">
+                    <ul className="menu menu-horizontal px-1 gap-4 font-medium text-[#212121]">
                         {navOptions}
                     </ul>
-                </div>                
-                <div className="navbar-end">
-                    {/* {
-                        user && user?.email ? <div className="flex gap-2 items-center"> <img className="rounded-full w-10 h-10 hidden md:block" 
-                            src={user?.photoURL} alt="" /> <Link to='/' className="btn text-white bg-gradient-to-r from-[#FF3600] to-[#ff3700d7]  hover:bg-[#ff3700b4]" onClick={logOut}> Log Out</Link></div> : <div className="flex gap-2 items-center"><FaUserTie className="w-10 h-10 hidden md:block"></FaUserTie> <Link to='/login' className="btn btn-success text-white bg-gradient-to-r from-[#FF3600] to-[#ff3700d7] hover:bg-[#ff3700b4]">Login</Link></div>
-                    } */}
+                </div>
+
+                {/* Navbar End */}
+                <div className="navbar-end relative">
                     {user && user.email ? (
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 relative">
                             <img
-                                onClick={() => setShowMenu(!showMenu)}
-                                className="rounded-full w-10 h-10 cursor-pointer"
                                 src={user?.photoURL}
                                 alt="User"
-                            />                            
+                                onClick={() => setShowMenu(!showMenu)}
+                                className="w-10 h-10 rounded-full cursor-pointer border-2 border-[#3F51B5] hover:shadow-md transition-shadow duration-200"
+                            />
                             {showMenu && (
                                 <div
-                                    className="absolute top-12 right-0 flex flex-col bg-white  rounded-lg shadow-lg w-40 z-50"
+                                    className="absolute top-14 right-0 bg-white border border-gray-200 shadow-lg rounded-md w-44 z-50"
                                     onMouseLeave={handleClickOutside}
                                 >
-                                    <span className="px-4 py-2 text-sm font-semibold  cursor-default">
+                                    <div className="px-4 py-2 text-sm font-semibold border-b text-[#212121]">
                                         {user.displayName || "User"}
-                                    </span>
+                                    </div>
                                     <Link
                                         to="/dashboard"
-                                        className="px-4 py-2 hover:bg-gray-100 text-sm "
+                                        className="block px-4 py-2 text-sm hover:bg-[#F5F5F5] text-[#3F51B5]"
                                     >
                                         Dashboard
                                     </Link>
@@ -69,7 +122,7 @@ const Navbar = () => {
                                             logOut();
                                             setShowMenu(false);
                                         }}
-                                        className="px-4 py-2 hover:bg-gray-100 text-sm text-left cursor-pointer"
+                                        className="w-full text-left px-4 py-2 text-sm hover:bg-[#FBE9E7] text-[#F44336]"
                                     >
                                         Logout
                                     </button>
@@ -78,21 +131,19 @@ const Navbar = () => {
                         </div>
                     ) : (
                         <div className="flex items-center gap-2">
-                            <FaUserTie className="w-10 h-10 hidden md:block" />
+                            <FaUserTie className="w-8 h-8 text-[#3F51B5] hidden md:block" />
                             <Link
                                 to="/login"
-                                className="btn btn-success text-white bg-gradient-to-r from-[#FF3600] to-[#ff3700d7] hover:bg-[#ff3700b4]"
+                                className="btn btn-sm bg-[#3F51B5] hover:bg-[#303F9F] text-white px-4 font-semibold transition"
                             >
                                 Login
                             </Link>
                         </div>
                     )}
-
-
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Navbar
+export default Navbar;
