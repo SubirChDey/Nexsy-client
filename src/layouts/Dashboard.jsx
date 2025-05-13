@@ -14,14 +14,27 @@ import {
     FaBoxOpen,
     FaSignOutAlt,
 } from "react-icons/fa";
+import useAxiosSecure from "../hooks/useAxiosSecure";
+import { useQuery } from "@tanstack/react-query";
 
 const Dashboard = () => {
-    const { logOut } = useContext(AuthContext);
+    const {user, logOut } = useContext(AuthContext);  
     const navigate = useNavigate();
 
-    const isAdmin = true;
-    const isModerator = false;
-    const isUser = false;
+    const axiosSecure = useAxiosSecure();
+
+
+    const { data: currentUser = {}, isLoading } = useQuery({
+    queryKey: ["currentUser", user?.email],
+    enabled: !!user?.email,
+    queryFn: async () => {
+        const res = await axiosSecure.get(`/users/${user.email}`);
+        return res.data;
+    },
+});
+if (isLoading) {
+    return <div className="text-center py-10 text-lg text-gray-600">Loading Dashboard...</div>;
+}
 
     const navLinkClass = ({ isActive }) =>
         `px-4 py-2 rounded-md text-sm font-medium flex items-center gap-2 ${isActive ? "bg-[#4F46E5] text-white" : "text-gray-700 hover:bg-[#F3F4F6]"}`;
@@ -47,7 +60,7 @@ const Dashboard = () => {
                         </div>
 
                         <ul className="menu px-4 py-4 space-y-1 text-base">
-                            {isAdmin && (
+                            {currentUser?.role === 'admin' && (                                
                                 <>
                                     <li>
                                         <NavLink to="/dashboard/statistics" className={navLinkClass}>
@@ -67,7 +80,7 @@ const Dashboard = () => {
                                 </>
                             )}
 
-                            {isModerator && (
+                            {currentUser?.role === 'moderator' && (
                                 <>
                                     <li>
                                         <NavLink to="/dashboard/productQueue" className={navLinkClass}>
@@ -82,7 +95,7 @@ const Dashboard = () => {
                                 </>
                             )}
 
-                            {isUser && (
+                            {currentUser?.role === 'user' && (
                                 <>
                                     <li>
                                         <NavLink to="/dashboard/userProfile" className={navLinkClass}>

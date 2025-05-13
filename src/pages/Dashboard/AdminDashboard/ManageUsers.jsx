@@ -17,11 +17,17 @@ const ManageUsers = () => {
     const handleRoleUpdate = async (id, role) => {
         try {
             await axiosSecure.patch(`/users/${id}`, { role });
+            Swal.fire({
+                title: "Success!",
+                text: `User is now an ${role}.`,
+                icon: "success"
+            });
             refetch();
         } catch (error) {
             console.error("Failed to update role:", error);
         }
     };
+
 
     const handleDeleteUser = user => {
         Swal.fire({
@@ -77,11 +83,10 @@ const ManageUsers = () => {
                                 <td className="p-3">
                                     <button
                                         onClick={() => handleRoleUpdate(user._id, "moderator")}
-                                        className={`px-3 py-1 rounded flex items-center gap-1 justify-center transition ${
-                                            user.role === "moderator"
+                                        className={`px-3 py-1 rounded flex items-center gap-1 justify-center transition ${user.role === "moderator"
                                                 ? "bg-blue-200 text-blue-700 cursor-not-allowed"
                                                 : "bg-blue-500 hover:bg-blue-600 text-white"
-                                        }`}
+                                            }`}
                                         disabled={user.role === "moderator"}
                                     >
                                         <FaUserCog />
@@ -91,11 +96,10 @@ const ManageUsers = () => {
                                 <td className="p-3">
                                     <button
                                         onClick={() => handleRoleUpdate(user._id, "admin")}
-                                        className={`px-3 py-1 rounded flex items-center gap-1 justify-center transition ${
-                                            user.role === "admin"
+                                        className={`px-3 py-1 rounded flex items-center gap-1 justify-center transition ${user.role === "admin"
                                                 ? "bg-green-200 text-green-700 cursor-not-allowed"
                                                 : "bg-green-500 hover:bg-green-600 text-white"
-                                        }`}
+                                            }`}
                                         disabled={user.role === "admin"}
                                     >
                                         <FaUserShield />
