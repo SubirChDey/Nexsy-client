@@ -14,6 +14,7 @@ import ManageCoupons from "../pages/Dashboard/AdminDashboard/ManageCoupons";
 import ProductReviewQueue from "../pages/Dashboard/ModeratorDashboard/ProductReviewQueue";
 import ReportedContents from "../pages/Dashboard/ModeratorDashboard/ReportedContents";
 import MyProfile from "../pages/Dashboard/UserDashboard/MyProfile";
+import ProductDetails from "../pages/ProductDetails/ProductDetails";
 
 
 const router = createBrowserRouter([
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
         {
             path: '/products',
             element: <Products></Products>
+        },
+        {
+            path: '/product/:id',
+            element: <ProductDetails></ProductDetails>
         },
         {
             path: '/login',

@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { FaArrowUp } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../providers/AuthProvider";
+import { Link } from "react-router-dom";
 
 const Products = () => {
   const { user } = useContext(AuthContext);
@@ -60,11 +61,11 @@ const Products = () => {
             className="border rounded-lg p-4 shadow hover:shadow-lg transition"
           >
             <img
-              src={product.image}
+              src={product.productImage}
               alt={product.productName}
               className="w-full h-40 object-cover rounded mb-4"
             />
-            <h3 className="text-xl font-semibold mb-2">{product.productName}</h3>
+            <Link to={`/product/${product._id}`} className="text-xl font-semibold mb-2">{product.productName}</Link>
             <div className="flex flex-wrap gap-2 mb-4">
               {product.tags.map((tag, i) => (
                 <span key={i} className="text-xs bg-gray-200 rounded-full px-2 py-1">
