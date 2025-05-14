@@ -10,7 +10,7 @@ const MyProducts = () => {
   const queryClient = useQueryClient();
 
   const fetchUserProducts = async () => {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/products?email=${user.email}`);
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/myProducts?email=${user.email}`);
     if (!res.ok) throw new Error("Failed to fetch products");
     return res.json();
   };
@@ -86,14 +86,15 @@ const MyProducts = () => {
                   <td className="px-4 py-2 border text-center">
                     <span
                       className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                        product.status === "accepted"
+                        product.status === "Accepted"
                           ? "bg-green-100 text-green-700"
-                          : product.status === "rejected"
+                          : product.status === "Rejected"
                           ? "bg-red-100 text-red-700"
                           : "bg-yellow-100 text-yellow-700"
                       }`}
                     >
-                      {product.status || "pending"}
+                      {/* {product.status || "pending"} */}
+                      {product.status}
                     </span>
                   </td>
                   <td className="px-4 py-2 border text-center space-x-2">
