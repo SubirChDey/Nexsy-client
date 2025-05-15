@@ -2,11 +2,34 @@ import { NavLink, Link } from "react-router-dom";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { FaUserTie } from "react-icons/fa";
+import useAxiosPublic from "../../../hooks/useAxiosPublic";
+import { useQuery } from "@tanstack/react-query";
 
 const Navbar = () => {
     const { user, logOut } = useContext(AuthContext);
     const [showMenu, setShowMenu] = useState(false);
     const handleClickOutside = () => setShowMenu(false);
+    const axiosPublic = useAxiosPublic();
+
+
+    const { data: roleData = {}, isLoading } = useQuery({
+        queryKey: ["userRole", user?.email],
+        enabled: !!user?.email,
+        queryFn: async () => {
+            const res = await axiosPublic.get(`${import.meta.env.VITE_API_URL}/users/role/${user.email}`);
+            return res.data;
+        },
+    });
+
+
+
+    const dashboardRoute = roleData.role === "admin"
+        ? "/dashboard/statistics"
+        : roleData.role === "moderator"
+            ? "/dashboard/productQueue"
+            : "/dashboard/userProfile";
+
+
 
     const navOptions = (
         <>
@@ -112,7 +135,7 @@ const Navbar = () => {
                                         {user.displayName || "User"}
                                     </div>
                                     <Link
-                                        to="/dashboard"
+                                        to={dashboardRoute}
                                         className="block px-4 py-2 text-sm hover:bg-[#F5F5F5] text-[#3F51B5]"
                                     >
                                         Dashboard
