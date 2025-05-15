@@ -82,7 +82,7 @@ const Coupon = () => {
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       <h2 className="text-2xl font-bold mb-6 text-indigo-700 text-center">
-        🔥 Active Coupon Offers
+         Active Coupon Offers
       </h2>
 
       {validCoupons.length > 0 ? (
