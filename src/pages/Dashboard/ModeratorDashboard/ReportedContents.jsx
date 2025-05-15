@@ -1,19 +1,14 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import Swal from 'sweetalert2';
+import React from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
+import { FaRegFlag } from 'react-icons/fa';
 
-const ReportedContents = () => {
+const ReportedProducts = () => {
   const axiosSecure = useAxiosSecure();
-  const queryClient = useQueryClient();
 
-  // Fetch reported products
-  const {
-    data: reportedProducts = [],
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
+  const { data: reportedProducts = [], refetch } = useQuery({
     queryKey: ['reported-products'],
     queryFn: async () => {
       const res = await axiosSecure.get('/products/reported');
@@ -21,69 +16,79 @@ const ReportedContents = () => {
     },
   });
 
-  // Delete mutation
-  const deleteMutation = useMutation({
-    mutationFn: async (id) => {
-      const res = await axiosSecure.delete(`/products/${id}`);
-      return res.data;
-    },
-    onSuccess: (data) => {
-      if (data.deletedCount > 0) {
-        Swal.fire('Deleted!', 'Product has been removed.', 'success');
-        queryClient.invalidateQueries({ queryKey: ['reported-products'] });
-      }
-    },
-    onError: () => {
-      Swal.fire('Error!', 'Failed to delete the product.', 'error');
-    },
-  });
-
   const handleDelete = async (id) => {
     const confirm = await Swal.fire({
       title: 'Are you sure?',
-      text: 'You will not be able to recover this product!',
+      text: "This will permanently delete the product!",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#d33',
       confirmButtonText: 'Yes, delete it!',
     });
 
     if (confirm.isConfirmed) {
-      deleteMutation.mutate(id);
+      const res = await axiosSecure.delete(`/products/${id}`);
+      if (res.data.deletedCount > 0) {
+        Swal.fire('Deleted!', 'Product has been deleted.', 'success');
+        refetch();
+      }
     }
   };
 
-  if (isLoading) return <p className="text-center mt-10">Loading reported products...</p>;
-  if (isError) return <p className="text-red-500 text-center mt-10">Error: {error.message}</p>;
+  const handleIgnore = async (id) => {
+    const res = await axiosSecure.patch(`/products/ignore-report/${id}`);
+    if (res.data.modifiedCount > 0) {
+      Swal.fire('Report Ignored', 'The report has been removed.', 'info');
+      refetch();
+    }
+  };
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Reported Contents</h2>
+    <div className="p-6 md:p-10 bg-white shadow-lg rounded-xl">
+      <h2 className="text-3xl font-semibold text-gray-800 mb-6 border-b pb-2 flex items-center gap-4">
+        <FaRegFlag /> Reported Products
+      </h2>
+
       {reportedProducts.length === 0 ? (
-        <p className="text-gray-500">No reported products found.</p>
+        <p className="text-gray-600">No reported products found.</p>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white border border-gray-300">
-            <thead className="bg-gray-100">
+        <div className="overflow-x-auto rounded-lg border border-gray-200">
+          <table className="min-w-full text-sm text-left text-gray-700">
+            <thead className="bg-gray-100 text-gray-900 uppercase text-xs">
               <tr>
-                <th className="py-2 px-4 border-b text-left">Product Name</th>
-                <th className="py-2 px-4 border-b text-left">Actions</th>
+                <th className="px-6 py-4">#</th>
+                <th className="px-6 py-4">Product Name</th>
+                <th className="px-6 py-4">View</th>
+                <th className="px-6 py-4">Ignore</th>
+                <th className="px-6 py-4">Delete</th>
               </tr>
             </thead>
             <tbody>
-              {reportedProducts.map((product) => (
-                <tr key={product._id}>
-                  <td className="py-2 px-4 border-b">{product.productName}</td>
-                  <td className="py-2 px-4 border-b flex gap-3">
-                    <Link
-                      to={`/product/${product._id}`}
-                      className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
-                    >
-                      View Details
+              {reportedProducts.map((product, index) => (
+                <tr
+                  key={product._id}
+                  className="hover:bg-gray-50 transition duration-200 border-t border-gray-100"
+                >
+                  <td className="px-6 py-4 font-medium">{index + 1}</td>
+                  <td className="px-6 py-4">{product.productName}</td>
+                  <td className="px-6 py-4">
+                    <Link to={`/product/${product._id}`}>
+                      <button className="px-4 py-1 rounded-full bg-emerald-500 text-white hover:bg-emerald-600 transition">
+                        View
+                      </button>
                     </Link>
+                  </td>
+                  <td className="px-6 py-4">
+                    <button
+                      onClick={() => handleIgnore(product._id)}
+                      className="px-4 py-1 rounded-full bg-yellow-400 text-white hover:bg-yellow-500 transition"
+                    >
+                      Ignore
+                    </button>
+                  </td>
+                  <td className="px-6 py-4">
                     <button
                       onClick={() => handleDelete(product._id)}
-                      className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
+                      className="px-4 py-1 rounded-full bg-rose-500 text-white hover:bg-rose-600 transition"
                     >
                       Delete
                     </button>
@@ -98,4 +103,4 @@ const ReportedContents = () => {
   );
 };
 
-export default ReportedContents;
+export default ReportedProducts;
