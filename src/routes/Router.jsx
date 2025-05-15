@@ -15,6 +15,7 @@ import ProductReviewQueue from "../pages/Dashboard/ModeratorDashboard/ProductRev
 import ReportedContents from "../pages/Dashboard/ModeratorDashboard/ReportedContents";
 import MyProfile from "../pages/Dashboard/UserDashboard/MyProfile";
 import ProductDetails from "../pages/ProductDetails/ProductDetails";
+import UpdateProduct from "../pages/Dashboard/UserDashboard/UpdateProduct";
 
 
 const router = createBrowserRouter([
@@ -88,6 +89,10 @@ const router = createBrowserRouter([
         {
           path: '/dashboard/myProducts',
           element: <MyProducts></MyProducts>,
+        },
+        {
+          path: '/dashboard/myProduct/update/:id',
+          element: <UpdateProduct></UpdateProduct>,
         }
       ]
     }

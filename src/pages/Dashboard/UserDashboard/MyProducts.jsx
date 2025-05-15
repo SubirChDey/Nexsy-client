@@ -124,7 +124,7 @@ const MyProducts = () => {
                   </td>
                   <td className="px-4 py-2 border text-center space-x-2">
                     <Link
-                      to={`/dashboard/updateProduct/${product._id}`}
+                      to={`/dashboard/myProduct/update/${product._id}`}
                       className="inline-block bg-blue-500 hover:bg-blue-600 text-white text-xs px-3 py-1 rounded"
                     >
                       Update
