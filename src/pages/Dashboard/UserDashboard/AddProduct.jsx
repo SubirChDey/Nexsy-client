@@ -53,6 +53,8 @@ const AddProduct = () => {
       status: 'Pending',
       featured: false,
       upVote: 0,
+      votedEmails: [],
+      reportedBy: [],
 
     };
 
