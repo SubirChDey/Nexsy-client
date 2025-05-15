@@ -49,9 +49,10 @@ const AddProduct = () => {
       ownerName: user.displayName,
       ownerEmail: user.email,
       ownerImage: user.photoURL,
-      createdAt: new Date(),  
+      createdAt: new Date(),
       status: 'Pending',
       featured: false,
+      upVote: 0,
 
     };
 

@@ -5,7 +5,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 const fetchProducts = async () => {
   const res = await axios.get(`${import.meta.env.VITE_API_URL}/products`);
-  // Sort: Pending -> Accepted -> Rejected
+
   return res.data.sort((a, b) => {
     const order = { Pending: 0, Accepted: 1, Rejected: 2 };
     return order[a.status] - order[b.status];
@@ -44,7 +44,7 @@ const ProductReviewQueue = () => {
   return (
     <div className="px-6 py-10 w-full mx-auto">
       <h2 className="text-4xl font-bold mb-8 text-center text-gray-800">Product Review Queue</h2>
-      <div className="overflow-x-auto bg-white shadow-lg">
+      <div className="overflow-x-auto bg-white shadow-lg w-full">
         <table className="min-w-full table-auto border border-gray-200 rounded-lg">
           <thead className="bg-gray-200 text-gray-700">
             <tr>

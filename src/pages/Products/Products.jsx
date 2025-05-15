@@ -3,6 +3,7 @@ import { FaArrowUp } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../providers/AuthProvider";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const Products = () => {
   const { user } = useContext(AuthContext);
@@ -45,30 +46,39 @@ const Products = () => {
   };
 
   return (
-    <div className="p-6">
-      <input
-        type="text"
-        placeholder="Search by tag..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="mb-6 px-4 py-2 border rounded w-full max-w-md"
-      />
+    <div className="max-w-7xl mx-auto px-4 py-10">
+      <h1 className="text-4xl font-bold text-center text-indigo-700 mb-10 mt-15">Discover Products</h1>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {products.map((product) => (
-          <div
+      <div className="mb-10 flex justify-center">
+        <input
+          type="text"
+          placeholder="Search by tag..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full max-w-md px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        />
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {products.map((product, i) => (
+          <motion.div
             key={product._id}
-            className="border rounded-lg p-4 shadow hover:shadow-lg transition"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.1 }}
+            className="bg-white border rounded-2xl p-4 shadow-lg hover:shadow-xl transition-all duration-300"
           >
             <img
               src={product.productImage}
               alt={product.productName}
-              className="w-full h-40 object-cover rounded mb-4"
+              className="w-full h-48 object-cover rounded-xl mb-4"
             />
-            <Link to={`/product/${product._id}`} className="text-xl font-semibold mb-2">{product.productName}</Link>
-            <div className="flex flex-wrap gap-2 mb-4">
+            <Link to={`/product/${product._id}`} className="text-lg font-semibold text-indigo-700 hover:underline">
+              {product.productName}
+            </Link>
+            <div className="flex flex-wrap gap-2 my-3">
               {product.tags.map((tag, i) => (
-                <span key={i} className="text-xs bg-gray-200 rounded-full px-2 py-1">
+                <span key={i} className="text-xs bg-indigo-100 text-indigo-600 rounded-full px-2 py-1 font-medium">
                   #{tag}
                 </span>
               ))}
@@ -76,27 +86,29 @@ const Products = () => {
             <button
               onClick={() => handleUpvote(product._id)}
               disabled={user?.email === product.ownerEmail}
-              className={`flex items-center gap-1 text-sm px-3 py-1 rounded ${
+              className={`flex items-center justify-center gap-1 text-sm px-3 py-2 rounded-lg font-medium transition-transform duration-200 ${
                 user?.email === product.ownerEmail
                   ? "bg-gray-300 cursor-not-allowed"
-                  : "bg-indigo-500 hover:bg-indigo-600 text-white"
+                  : "bg-indigo-500 hover:bg-indigo-600 text-white hover:scale-105"
               }`}
             >
               <FaArrowUp />
               {product.votes || 0}
             </button>
-          </div>
+          </motion.div>
         ))}
       </div>
 
       {/* Pagination */}
-      <div className="mt-6 flex justify-center gap-2">
+      <div className="mt-12 flex justify-center gap-3">
         {[...Array(totalPages)].map((_, idx) => (
           <button
             key={idx}
             onClick={() => setPage(idx + 1)}
-            className={`px-3 py-1 border rounded ${
-              page === idx + 1 ? "bg-indigo-500 text-white" : "bg-white"
+            className={`px-4 py-2 rounded-full border font-medium ${
+              page === idx + 1
+                ? "bg-indigo-600 text-white"
+                : "bg-white hover:bg-indigo-100 text-indigo-700"
             }`}
           >
             {idx + 1}
