@@ -17,12 +17,12 @@ const FeaturedProducts = () => {
       const res = await axios.get(`${import.meta.env.VITE_API_URL}/featuredProducts`);
       return res.data;
     },
-  }); 
+  });
 
   // Upvote mutation
   const upvoteMutation = useMutation({
     mutationFn: async (productId) => {
-      await axios.post(`/api/products/upvote/${productId}`, {
+      await axios.patch(`${import.meta.env.VITE_API_URL}/products/upvote/${productId}`, {
         userId: user._id,
       });
     },
@@ -39,12 +39,13 @@ const FeaturedProducts = () => {
     }
   };
 
-  if (isLoading) return <p className="text-center">Loading...</p>;
+  if (isLoading) return <p className="text-center py-10 text-gray-500">Loading featured products...</p>;
 
   return (
-    <section className="p-4 md:p-8">
-      <h2 className="text-2xl font-bold mb-4">Featured Products</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <section className="px-4 md:px-10 my-12">
+      <h2 className="text-3xl font-bold mb-8 text-center text-[#1A2238]">⭐ Featured Products</h2>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {products.map((product) => {
           const hasVoted = product.voters?.includes(user?._id);
           const isOwner = product.ownerId === user?._id;
@@ -52,40 +53,42 @@ const FeaturedProducts = () => {
           return (
             <div
               key={product._id}
-              className="bg-white rounded-xl shadow-md p-4 hover:shadow-lg transition"
+              className="bg-white rounded-2xl shadow-md p-4 hover:shadow-xl transition duration-300 border border-gray-100"
             >
               <img
                 src={product.productImage}
                 alt={product.productName}
-                className="w-full h-40 object-cover rounded-md"
+                className="w-full h-40 object-cover rounded-xl mb-3"
               />
               <h3
-                className="text-lg font-semibold mt-2 hover:text-blue-500 cursor-pointer"
+                className="text-xl font-semibold text-[#0F172A] hover:text-[#2563EB] cursor-pointer transition"
                 onClick={() => navigate(`/product/${product._id}`)}
               >
-                {product.Name}
+                {product.productName}
               </h3>
-              <div className="flex flex-wrap gap-2 my-2">
+
+              <div className="flex flex-wrap gap-2 my-3">
                 {product.tags?.map((tag, i) => (
                   <span
                     key={i}
-                    className="text-xs bg-gray-200 text-gray-700 px-2 py-1 rounded-full"
+                    className="text-xs bg-[#F1F5F9] text-[#334155] px-2 py-1 rounded-full"
                   >
                     #{tag}
                   </span>
                 ))}
               </div>
+
               <button
                 onClick={() => handleUpvote(product)}
                 disabled={isOwner || hasVoted}
-                className={`flex items-center gap-2 mt-4 px-3 py-2 text-sm rounded-full ${
+                className={`flex items-center justify-center gap-2 w-full mt-4 py-2 text-sm rounded-full font-medium transition ${
                   isOwner || hasVoted
-                    ? "bg-gray-300 cursor-not-allowed"
-                    : "bg-blue-500 text-white hover:bg-blue-600"
+                    ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                    : "bg-[#2563EB] text-white hover:bg-[#1D4ED8]"
                 }`}
               >
                 <FaArrowUp />
-                {product.votes || 0}
+                {product.upVote || 0}
               </button>
             </div>
           );

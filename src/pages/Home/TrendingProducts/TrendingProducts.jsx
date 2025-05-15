@@ -1,8 +1,45 @@
+import React from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
+// Replace with your actual Card component used for featured products
+import ProductCard from '../../../components/SharedComponents/ProductCard';
 
 const TrendingProducts = () => {
-  return (
-    <div>TrendingProducts</div>
-  )
-}
+  const navigate = useNavigate();
 
-export default TrendingProducts
+  const { data: trendingProducts = [], isLoading, isError } = useQuery({
+    queryKey: ['trendingProducts'],
+    queryFn: async () => {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/trendingProducts`);
+      return res.data;
+    },
+  });
+
+  if (isLoading) return <p className="text-center py-10">Loading trending products...</p>;
+  if (isError) return <p className="text-center py-10 text-red-500">Failed to load trending products.</p>;
+
+  return (
+    <section className="my-12 px-4 md:px-10">
+      <h2 className="text-2xl font-bold mb-6 text-center">🔥 Trending Products</h2>
+      
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {trendingProducts.map(product => (
+          <ProductCard key={product._id} product={product} />
+        ))}
+      </div>
+
+      <div className="flex justify-center mt-8">
+        <button
+          onClick={() => navigate('/products')}
+          className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition"
+        >
+          Show All Products
+        </button>
+      </div>
+    </section>
+  );
+};
+
+export default TrendingProducts;
