@@ -84,7 +84,7 @@ const UpdateProduct = () => {
     );
 
   return (
-    <div className="max-w-3xl mx-auto my-12 p-10 bg-white rounded-xl shadow-xl border border-gray-200">
+    <div className="w-8/12 mx-auto my-12 p-10 bg-white rounded-xl shadow-xl border border-gray-200">
       <h2 className="text-3xl font-extrabold mb-8 text-blue-700">
         Update Product
       </h2>

@@ -16,6 +16,7 @@ import ReportedContents from "../pages/Dashboard/ModeratorDashboard/ReportedCont
 import MyProfile from "../pages/Dashboard/UserDashboard/MyProfile";
 import ProductDetails from "../pages/ProductDetails/ProductDetails";
 import UpdateProduct from "../pages/Dashboard/UserDashboard/UpdateProduct";
+import PrivateRoute from "./PrivateRoute";
 
 
 const router = createBrowserRouter([
@@ -34,7 +35,7 @@ const router = createBrowserRouter([
         },
         {
             path: '/product/:id',
-            element: <ProductDetails></ProductDetails>
+            element: <PrivateRoute><ProductDetails></ProductDetails></PrivateRoute>
         },
         {
             path: '/login',
@@ -48,7 +49,7 @@ const router = createBrowserRouter([
     },
     {
       path: 'dashboard',
-      element: <Dashboard></Dashboard>,
+      element: <PrivateRoute><Dashboard></Dashboard></PrivateRoute>,
       children: [
 
         // Admin Routes

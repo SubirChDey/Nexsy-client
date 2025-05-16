@@ -38,7 +38,7 @@ const Registration = () => {
         const user = result.user;
         manageProfile(name, photo);
         setUser(user);
-        const userInfo = { name, email, role: 'user' };
+        const userInfo = { name, email, photo,  role: 'user', isSubscribed: false };
         axiosPublic.post('/users', userInfo)
           .then(res => {
             if (res.data.insertedId) {
@@ -61,7 +61,9 @@ const Registration = () => {
         const userInfo = {
           email: result.user?.email,
           name: result.user?.displayName,
+          photo: result.user?.photoURL,
           role: 'user',
+          isSubscribed: false,
         };
         axiosPublic.post('/users', userInfo)
           .then(res => {

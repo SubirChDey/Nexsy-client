@@ -22,7 +22,6 @@ const Navbar = () => {
     });
 
 
-
     const dashboardRoute = roleData.role === "admin"
         ? "/dashboard/statistics"
         : roleData.role === "moderator"

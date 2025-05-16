@@ -1,8 +1,109 @@
+import React, { useContext, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { AuthContext } from "../../../providers/AuthProvider";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const MyProfile = () => {
-  return (
-    <div>UserProfile</div>
-  )
-}
+  const { user, loading } = useContext(AuthContext);
+  const axiosSecure = useAxiosSecure();
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [coupon, setCoupon] = useState("");
+  const subscriptionAmount = 199;
 
-export default MyProfile
+  const {
+    data: profile = {},
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ["user-profile", user?.email],
+    enabled: !loading && !!user?.email,
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/user/profile?email=${user.email}`);
+      return res.data;
+    },
+  });
+
+  const handleSubscribeClick = () => {
+    setShowPaymentModal(true);
+  };
+
+  const handlePaymentSuccess = async () => {
+    await axiosSecure.patch(`/user/subscribe?email=${user.email}`);
+    setShowPaymentModal(false);
+    refetch();
+  };
+
+  if (loading || isLoading) return <p className="text-center py-10">Loading...</p>;
+
+  return (
+    <div className="w-11/12 md:w-9/12 mx-auto mt-10 px-6 py-10 bg-gradient-to-b from-white to-blue-50 rounded-xl shadow-lg">      
+      <h1 className="text-4xl font-bold text-center mb-10 text-blue-700">My Profile</h1>
+      <div className="flex flex-col md:flex-row items-center justify-between gap-10">        
+        <div className="w-full md:w-1/2 flex justify-center">
+          <img
+            src={profile?.photo}
+            alt={profile?.name}
+            className="w-72 h-72 object-cover rounded-xl border-4 border-blue-400 shadow-md"
+          />
+        </div>
+        
+        <div className="hidden md:block h-72 w-px bg-gray-300"></div>
+        
+        <div className="w-full md:w-1/2 text-center md:text-left space-y-4">
+          <h2 className="text-3xl font-semibold text-gray-800">{profile.name}</h2>
+          <p className="text-gray-600 text-lg">{profile.email}</p>
+          <p className="text-lg">
+            Status:{" "}
+            <span
+              className={`font-semibold ${
+                profile.isSubscribed ? "text-green-600" : "text-red-500"
+              }`}
+            >
+              {profile.isSubscribed ? "Verified" : "Not Verified"}
+            </span>
+          </p>
+
+          <button
+            onClick={handleSubscribeClick}
+            className="mt-4 inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2 rounded-lg transition"
+          >
+            Subscribe - ${subscriptionAmount}
+          </button>
+        </div>
+      </div>
+      
+      {showPaymentModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-8 rounded-lg shadow-2xl w-11/12 max-w-md relative animate-fadeIn">
+            <button
+              onClick={() => setShowPaymentModal(false)}
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-xl"
+            >
+              &times;
+            </button>
+            <h3 className="text-2xl font-bold mb-4 text-blue-700">Complete Your Subscription</h3>
+            <p className="mb-4 text-gray-700">Pay <strong>${subscriptionAmount}</strong> to get verified access.</p>
+
+            {/* Coupon Input */}
+            <input
+              type="text"
+              placeholder="Enter Coupon Code (optional)"
+              className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring focus:ring-blue-300 mb-4"
+              value={coupon}
+              onChange={(e) => setCoupon(e.target.value)}
+            />
+
+            <button
+              onClick={handlePaymentSuccess}
+              className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded font-medium transition"
+            >
+              Simulate Payment Success
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default MyProfile;
