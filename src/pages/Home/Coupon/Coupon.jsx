@@ -5,11 +5,14 @@ import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import useAxiosPublic from "../../../hooks/useAxiosPublic";
+
 
 const fetchCoupons = async () => {
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/api/couponCode`);
-  if (!res.ok) throw new Error("Failed to fetch coupons");
-  return res.json();
+  const axiosPublic = useAxiosPublic();
+  
+  const res = await axiosPublic.get("/api/couponCode");
+  return res.data;
 };
 
 const bgColors = [
@@ -82,9 +85,11 @@ const Coupon = () => {
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       <h2 className="text-4xl font-bold mb-4 text-indigo-700 text-center">
-         Active Coupon Offers
+        Active Coupon Offers
       </h2>
-      <p className="text-center mb-12 text-gray-600">Unlock Deals. Save More. Shop Smarter with Coupons.</p>
+      <p className="text-center mb-12 text-gray-600">
+        Unlock Deals. Save More. Shop Smarter with Coupons.
+      </p>
 
       {validCoupons.length > 0 ? (
         <Swiper
@@ -136,7 +141,9 @@ const Coupon = () => {
                     <strong>Expires:</strong>{" "}
                     {new Date(coupon.expiryDate).toLocaleDateString()}
                   </p>
-                  <p className="text-sm mt-2 opacity-90">{coupon.description}</p>
+                  <p className="text-sm mt-2 opacity-90">
+                    {coupon.description}
+                  </p>
                 </div>
               </SwiperSlide>
             );

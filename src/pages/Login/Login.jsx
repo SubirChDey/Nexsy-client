@@ -77,7 +77,7 @@ const Login = () => {
         <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4 pt-20">
             <div className="w-full max-w-2xl bg-white rounded-xl shadow-lg p-8">
                 <div className="text-center mb-6">
-                    <h1 className="text-4xl font-extrabold text-[#FF6A00]">
+                    <h1 className="text-4xl font-extrabold text-indigo-600">
                         Welcome Back
                     </h1>
 
@@ -115,7 +115,7 @@ const Login = () => {
                         <div className="text-red-500 text-sm text-center">{errorMessage}</div>
                     )}
 
-                    <button type="submit" className="btn w-full bg-gradient-to-r from-[#FF3600] to-[#FF6A00] text-white hover:bg-gradient-to-l duration-300 border-none rounded-lg hover:scale-105 transition-transform text-sm md:text-base lg:text-lg shadow-lg font-bold mt-2">
+                    <button type="submit" className="btn w-full bg-indigo-600 text-white hover:bg-gradient-to-l duration-300 border-none rounded-lg hover:scale-105 transition-transform text-sm md:text-base lg:text-lg shadow-lg font-bold mt-2">
                         Login
                     </button>
                 </form>

@@ -67,7 +67,7 @@ const Registration = () => {
         };
         axiosPublic.post('/users', userInfo)
           .then(res => {
-            console.log(res)
+            // console.log(res)
             Swal.fire({
               position: "top-center",
               icon: "success",
@@ -91,7 +91,7 @@ const Registration = () => {
       {/* Form Section */}
       <div className="flex-1 p-10">
         <div className="md:w-10/12 mx-auto text-center">
-          <h1 className="text-4xl font-extrabold text-[#FF6A00]">
+          <h1 className="text-4xl font-extrabold text-indigo-600">
             Create Account
           </h1>
           <p className="text-gray-700 mt-2 mb-6">Join now to get personalized content and game insights tailored just for you.</p>
@@ -126,7 +126,7 @@ const Registration = () => {
 
               {error && <p className="text-red-600 text-sm">{error}</p>}
                  
-              <button type="submit" className="btn w-full bg-gradient-to-r from-[#FF3600] to-[#FF6A00] text-white hover:bg-gradient-to-l duration-300 border-none rounded-lg hover:scale-105 transition-transform text-sm md:text-base lg:text-lg shadow-lg font-bold mt-2">
+              <button type="submit" className="btn w-full bg-indigo-600 text-white hover:bg-gradient-to-l duration-300 border-none rounded-lg hover:scale-105 transition-transform text-sm md:text-base lg:text-lg shadow-lg font-bold mt-2">
                 Create Account
               </button>             
 

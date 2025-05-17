@@ -70,7 +70,7 @@ const FeaturedProducts = () => {
           return (
             <div
               key={product._id}
-              className="bg-white rounded-2xl shadow-md p-4 hover:shadow-xl transition duration-300 border border-gray-100"
+              className="flex flex-col bg-white rounded-2xl shadow-md p-4 hover:shadow-xl transition duration-300 border border-gray-100"
             >
               <img
                 src={product.productImage}
@@ -84,16 +84,22 @@ const FeaturedProducts = () => {
                 {product.productName}
               </h3>
 
-              <div className="flex flex-wrap gap-2 my-3">
-                {product.tags?.map((tag, i) => (
-                  <span
-                    key={i}
-                    className="text-xs bg-[#F1F5F9] text-[#334155] px-2 py-1 rounded-full"
-                  >
-                    #{tag}
-                  </span>
-                ))}
+              <div className="flex flex-wrap gap-2 my-3 min-h-[32px]">
+                {product.tags?.length > 0 ? (
+                  product.tags.map((tag, i) => (
+                    <span
+                      key={i}
+                      className="text-xs bg-[#F1F5F9] text-[#334155] px-2 py-1 rounded-full"
+                    >
+                      #{tag}
+                    </span>
+                  ))
+                ) : (
+                  <div className="invisible">placeholder</div>
+                )}
               </div>
+
+              <div className="flex-grow"></div>
 
               <button
                 onClick={() => {

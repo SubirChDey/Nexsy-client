@@ -5,7 +5,6 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { motion } from 'framer-motion';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
 import { AuthContext } from '../../../providers/AuthProvider';
 import useAxiosPublic from '../../../hooks/useAxiosPublic';
 
@@ -18,10 +17,10 @@ const TrendingProducts = () => {
   const { data: trendingProducts = [], isLoading, isError } = useQuery({
     queryKey: ['trendingProducts'],
     queryFn: async () => {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/trendingProducts`);
+      const res = await axiosPublic.get(`/trendingProducts`);
       return res.data;
     },
-    enabled: !!user,
+    enabled: true,
   });
 
   const upvoteMutation = useMutation({
@@ -33,18 +32,18 @@ const TrendingProducts = () => {
     },
     onSuccess: (data) => {
       if (data.modifiedCount > 0) {
-        if (data.action === "upvoted") {
-          toast.success("Thank you! Your upvote has been recorded.");
-        } else if (data.action === "unvoted") {
-          toast.info("Upvote removed");
+        if (data.action === 'upvoted') {
+          toast.success('Thank you! Your upvote has been recorded.');
+        } else if (data.action === 'unvoted') {
+          toast.info('Upvote removed');
         }
         queryClient.invalidateQueries(['trendingProducts']);
       } else {
-        toast.info("No changes made");
+        toast.info('No changes made');
       }
     },
     onError: () => {
-      toast.error("Failed to upvote");
+      toast.error('Failed to upvote');
     },
   });
 
@@ -71,9 +70,10 @@ const TrendingProducts = () => {
       productImage,
       upVote = 0,
       votedEmails = [],
+      ownerEmail,
     } = product;
 
-    const userHasVoted = votedEmails.includes(user?.email);
+    const userHasVoted = user && votedEmails.includes(user.email);
 
     return (
       <motion.div
@@ -104,12 +104,12 @@ const TrendingProducts = () => {
           <button
             onClick={() => {
               if (!user) {
-                navigate("/login");
+                navigate('/login');
                 return;
               }
-              if (product.ownerEmail == user.email) {
-                    return toast.error('You can not vote your own product');
-                  }
+              if (ownerEmail === user.email) {
+                return toast.error('You can not vote your own product');
+              }
               upvoteMutation.mutate(_id);
             }}
             className={`flex items-center gap-1 transition px-3 py-1 rounded 
@@ -146,10 +146,6 @@ const TrendingProducts = () => {
     );
   };
 
-  if (!user) {
-    return <p className="text-center py-10 text-gray-500">Please log in to view trending products.</p>;
-  }
-
   if (isLoading) return <p className="text-center py-10">Loading trending products...</p>;
   if (isError) return <p className="text-center py-10 text-red-500">Failed to load trending products.</p>;
 
@@ -175,7 +171,6 @@ const TrendingProducts = () => {
         </button>
       </div>
 
-      {/* Toast container */}
       <ToastContainer
         position="top-right"
         autoClose={3000}
