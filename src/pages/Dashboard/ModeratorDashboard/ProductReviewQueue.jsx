@@ -1,29 +1,27 @@
 import React from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
-const fetchProducts = async () => {
-  const res = await axios.get(`${import.meta.env.VITE_API_URL}/products`);
-
-  return res.data.sort((a, b) => {
-    const order = { Pending: 0, Accepted: 1, Rejected: 2 };
-    return order[a.status] - order[b.status];
-  });
-};
 
 const ProductReviewQueue = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const axiosSecure = useAxiosSecure();
 
   const { data: products = [], isLoading } = useQuery({
     queryKey: ['products'],
-    queryFn: fetchProducts,
+    queryFn: async () => {
+      const res = await axiosSecure.get('/products');
+      return res.data.sort((a, b) => {
+        const order = { Pending: 0, Accepted: 1, Rejected: 2 };
+        return order[a.status] - order[b.status];
+      });
+    },
   });
 
   const mutation = useMutation({
-    mutationFn: ({ id, update }) =>
-      axios.patch(`${import.meta.env.VITE_API_URL}/products/${id}`, update),
+    mutationFn: ({ id, update }) => axiosSecure.patch(`/products/${id}`, update),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] });
     },

@@ -6,6 +6,8 @@ import { toast } from 'react-toastify';
 import { AuthContext } from '../../providers/AuthProvider';
 import { motion } from 'framer-motion';
 import Rating from 'react-rating-stars-component';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
+
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -13,33 +15,32 @@ const ProductDetails = () => {
   const queryClient = useQueryClient();
   const [reviewDesc, setReviewDesc] = useState('');
   const [rating, setRating] = useState(0);
+  const axiosSecure = useAxiosSecure();
 
   const { data: product, isLoading: productLoading } = useQuery({
     queryKey: ['product', id],
     queryFn: async () => {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/product/${id}`);
-      if (!res.ok) throw new Error('Failed to load product');
-      return res.json();
+      const res = await axiosSecure.get(`/product/${id}`);
+      return res.data;
     },
   });
 
   const { data: reviews = [], isLoading: reviewsLoading } = useQuery({
     queryKey: ['reviews', id],
     queryFn: async () => {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/reviews?productId=${id}`);
-      if (!res.ok) throw new Error('Failed to load reviews');
-      return res.json();
+      const res = await axiosSecure.get(`/reviews`, {
+        params: { productId: id },
+      });
+      return res.data;
     },
   });
 
   const upvoteMutation = useMutation({
     mutationFn: async () => {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/products/upvote/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: user.email }),
+      const res = await axiosSecure.patch(`/products/upvote/${id}`, {
+        email: user.email,
       });
-      return res.json();
+      return res.data;
     },
     onSuccess: (data) => {
       if (data.modifiedCount > 0) {
@@ -54,12 +55,10 @@ const ProductDetails = () => {
 
   const reportMutation = useMutation({
     mutationFn: async () => {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/products/report/${id}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ reporterEmail: user.email }),
+      const res = await axiosSecure.post(`/products/report/${id}`, {
+        reporterEmail: user.email,
       });
-      return res.json();
+      return res.data;
     },
     onSuccess: (data) => {
       if (data.success) toast.success('Product reported successfully');
@@ -70,12 +69,8 @@ const ProductDetails = () => {
 
   const reviewMutation = useMutation({
     mutationFn: async (reviewData) => {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/reviews`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(reviewData),
-      });
-      return res.json();
+      const res = await axiosSecure.post(`/reviews`, reviewData);
+      return res.data;
     },
     onSuccess: (data) => {
       if (data.insertedId) {
