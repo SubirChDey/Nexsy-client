@@ -3,9 +3,9 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectFade } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/effect-fade";
-import banner1 from '../../../assets/banner1.jpg'
-import banner2 from '../../../assets/banner2.jpg'
-import banner3 from '../../../assets/banner3.jpg'
+import banner1 from '../../../assets/banner1.webp'
+import banner2 from '../../../assets/banner2.webp'
+import banner3 from '../../../assets/banner3.webp'
 
 const Banner = () => {
   const images = [banner1, banner2, banner3];
