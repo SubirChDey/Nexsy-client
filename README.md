@@ -1,12 +1,26 @@
-# React + Vite
+# Nexsy
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Live Site:** [https://nexsy.web.app](https://nexsy.netlify.app/)
 
-Currently, two official plugins are available:
+Nexsy is a sleek, modern platform built using the MERN stack, designed to showcase and discover the latest tech products and innovations. It offers a smooth user experience with powerful features for both creators and tech enthusiasts.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Key Features
 
-## Expanding the ESLint configuration
+- 🔍 **Product Discovery Page**: Browse featured and latest products with animations and clean UI.
+- 💡 **Product Details View**: View comprehensive product information, specifications, and user reviews.
+- 👍 **Upvote & Report System**: Users can upvote or report products based on their experience.
+- 📝 **User Reviews**: Authenticated users can post detailed reviews and feedback.
+- 🛠 **Admin Dashboard**: Admins can manage products, coupons, user roles, and monitor site statistics (including a pie chart view).
+- 🧑‍💻 **Role-Based Access**: Access and features vary depending on membership level (e.g., product posting limits).
+- 📱 **Responsive Design**: Optimized for desktop and mobile viewing with a consistent experience across devices.
+- 🔐 **Authentication & Authorization**: Secure login with JWT-based user roles.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠 Tech Stack
+
+- **Frontend**: React.js, Tailwind CSS, React Router, React Query
+- **Backend**: Node.js, Express.js, MongoDB
+- **Authentication**: Firebase Auth
+- **Deployment**: Vercel (frontend), Render (backend)
+
+## 📁 Project Structure
+
