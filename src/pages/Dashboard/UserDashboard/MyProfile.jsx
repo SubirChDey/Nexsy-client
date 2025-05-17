@@ -5,6 +5,7 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import CheckoutForm from "../Payments/CheckoutForm";
+import Swal from "sweetalert2";
 
 const MyProfile = () => {
   const { user, loading } = useContext(AuthContext);
@@ -62,11 +63,18 @@ const MyProfile = () => {
     }
   };
 
-  const handlePaymentSuccess = async () => {
-    await axiosSecure.patch(`/user/subscribe?email=${user.email}`);
-    setShowPaymentModal(false);
-    refetch();
-  };
+const handlePaymentSuccess = async () => {
+  await axiosSecure.patch(`/user/subscribe?email=${user.email}`);
+  setShowPaymentModal(false);
+  refetch();
+  Swal.fire({
+    icon: "success",
+    title: "Subscription Successful!",
+    text: "Thank you for subscribing. Your profile is now verified.",
+    confirmButtonColor: "#3085d6",
+  });
+};
+
 
   if (loading || isLoading) return <p className="text-center py-10">Loading...</p>;
 
@@ -96,9 +104,12 @@ const MyProfile = () => {
 
           <button
             onClick={handleSubscribeClick}
-            className="mt-4 inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2 rounded-lg transition"
+            className={`mt-4 inline-block ${
+              profile.isSubscribed ? "bg-green-500 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+            } text-white font-medium px-6 py-2 rounded-lg transition`}
+            disabled={profile.isSubscribed}
           >
-            Subscribe - $199
+            {profile.isSubscribed ? "Subscribed" : "Subscribe - $199"}
           </button>
         </div>
       </div>
@@ -117,20 +128,40 @@ const MyProfile = () => {
               Pay <strong>${finalAmount}</strong> to get verified access.
             </p>
 
-            <div className="mb-4">
+            <div className="mb-4 relative">
               <input
                 type="text"
                 placeholder="Enter Coupon Code (optional)"
-                className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring focus:ring-blue-300"
+                className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring focus:ring-blue-300 disabled:bg-gray-100"
                 value={coupon}
                 onChange={(e) => setCoupon(e.target.value)}
+                disabled={discount > 0}
               />
+              {discount > 0 && (
+                <button
+                  onClick={() => {
+                    setCoupon("");
+                    setDiscount(0);
+                    setFinalAmount(199);
+                    setCouponError("");
+                  }}
+                  className="absolute top-1/2 right-3 transform -translate-y-1/2 text-red-500 hover:text-red-700 text-xl"
+                  title="Remove coupon"
+                >
+                  &times;
+                </button>
+              )}
+
               <button
                 onClick={validateCoupon}
-                className="mt-2 w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded transition"
+                disabled={discount > 0}
+                className={`mt-2 w-full ${
+                  discount > 0 ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600"
+                } text-white py-2 rounded transition`}
               >
                 Apply Coupon
               </button>
+
               {couponError && <p className="text-red-500 mt-2">{couponError}</p>}
               {discount > 0 && (
                 <p className="text-green-600 mt-2">Coupon applied! You saved ${discount}.</p>
