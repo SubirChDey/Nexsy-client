@@ -16,34 +16,37 @@ import {
 } from "react-icons/fa";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
+import useAdmin from "../hooks/useAdmin";
 
 const Dashboard = () => {
-    const {user, logOut } = useContext(AuthContext);  
+    const { user, logOut } = useContext(AuthContext);
     const navigate = useNavigate();
-
     const axiosSecure = useAxiosSecure();
 
-
     const { data: currentUser = {}, isLoading } = useQuery({
-    queryKey: ["currentUser", user?.email],
-    enabled: !!user?.email,
-    queryFn: async () => {
-        const res = await axiosSecure.get(`/users/${user.email}`);
-        return res.data;
-    },
-});
-if (isLoading) {
-    return <div className="text-center py-10 text-lg text-gray-600">Loading Dashboard...</div>;
-}
+        queryKey: ["currentUser", user?.email],
+        enabled: !!user?.email,
+        queryFn: async () => {
+            const res = await axiosSecure.get(`/users/${user.email}`);
+            return res.data;
+        },
+    });
+
+    if (isLoading) {
+        return <div className="text-center py-10 text-lg text-gray-600">Loading Dashboard...</div>;
+    }
 
     const navLinkClass = ({ isActive }) =>
-        `px-4 py-2 rounded-md text-sm font-medium flex items-center gap-2 ${isActive ? "bg-[#4F46E5] text-white" : "text-gray-700 hover:bg-[#F3F4F6]"}`;
+        `px-4 py-2 rounded-md text-sm font-medium flex items-center gap-2 transition-all duration-150 ${isActive
+            ? "bg-indigo-700 text-white"
+            : "text-gray-700 hover:bg-indigo-50 hover:text-indigo-700"
+        }`;
 
     return (
         <div className="drawer lg:drawer-open">
             <input id="dashboard-drawer" type="checkbox" className="drawer-toggle" />
-            <div className="drawer-content flex flex-col bg-[#F9FAFB]">
-                <label htmlFor="dashboard-drawer" className="btn bg-[#4F46E5] text-white drawer-button lg:hidden m-4">
+            <div className="drawer-content flex flex-col bg-gray-50">
+                <label htmlFor="dashboard-drawer" className="btn bg-indigo-700 text-white drawer-button lg:hidden m-4">
                     Open Menu
                 </label>
                 <Outlet />
@@ -51,16 +54,19 @@ if (isLoading) {
 
             <div className="drawer-side">
                 <label htmlFor="dashboard-drawer" className="drawer-overlay"></label>
-                <div className="w-64 min-h-full bg-white shadow-lg border-r border-gray-200 flex flex-col justify-between">
+                <div className="w-64 min-h-full bg-white shadow-xl border-r border-gray-200 flex flex-col justify-between">
                     {/* Top Section */}
                     <div>
-                        <div className="px-6 py-6 bg-[#4F46E5] text-white">
+                        <div className="px-6 py-6 bg-indigo-700 text-white">
                             <h3 className="text-2xl font-bold">Nexsy</h3>
-                            <p className="text-sm mt-1">All-in-One Dashboard for Tech Product Launches</p>
+                            <p className="text-sm mt-1 text-indigo-100">
+                                All-in-One Dashboard for Tech Product Launches
+                            </p>
                         </div>
 
                         <ul className="menu px-4 py-4 space-y-1 text-base">
-                            {currentUser?.role === 'admin' && (                                
+                            
+                            {currentUser?.role === "admin" && (
                                 <>
                                     <li>
                                         <NavLink to="/dashboard/statistics" className={navLinkClass}>
@@ -80,7 +86,7 @@ if (isLoading) {
                                 </>
                             )}
 
-                            {currentUser?.role === 'moderator' && (
+                            {currentUser?.role === "moderator" && (
                                 <>
                                     <li>
                                         <NavLink to="/dashboard/productQueue" className={navLinkClass}>
@@ -95,7 +101,7 @@ if (isLoading) {
                                 </>
                             )}
 
-                            {currentUser?.role === 'user' && (
+                            {currentUser?.role === "user" && (
                                 <>
                                     <li>
                                         <NavLink to="/dashboard/userProfile" className={navLinkClass}>
@@ -130,7 +136,7 @@ if (isLoading) {
                                 logOut();
                                 navigate("/login");
                             }}
-                            className="w-full text-left px-4 py-2 rounded-md text-sm font-medium text-red-600 hover:bg-red-50 flex items-center gap-2"
+                            className="w-full text-left px-4 py-2 rounded-md text-sm font-medium text-red-600 hover:bg-red-50 flex items-center gap-2 transition-all duration-150"
                         >
                             <FaSignOutAlt /> Logout
                         </button>

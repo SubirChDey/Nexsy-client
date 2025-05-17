@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaThumbsUp, FaFlag } from 'react-icons/fa';
+import { FaFlag, FaArrowUp } from 'react-icons/fa';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { motion } from 'framer-motion';
@@ -49,7 +49,7 @@ const ProductCard = ({ product }) => {
       />
       <div className="flex-1">
         <h3
-          className="text-lg font-bold mb-2 text-neutral-800 cursor-pointer hover:text-blue-600 transition"
+          className="text-lg font-bold mb-2 text-neutral-800 cursor-pointer hover:text-indigo-700 transition"
           onClick={() => navigate(`/product/${_id}`)}
         >
           {productName}
@@ -65,9 +65,9 @@ const ProductCard = ({ product }) => {
       <div className="flex items-center justify-between mt-4">
         <button
           onClick={handleUpvote}
-          className="flex items-center gap-1 text-green-600 hover:text-green-800 transition"
+          className="flex items-center gap-1 text-indigo-400 hover:text-indigo-700 transition"
         >
-          <FaThumbsUp className="text-sm" /> {upVote}
+          <FaArrowUp className="text-sm" /> {upVote}
         </button>
 
         <button
@@ -79,7 +79,7 @@ const ProductCard = ({ product }) => {
 
         <button
           onClick={() => navigate(`/product/${_id}`)}
-          className="bg-blue-600 text-white text-xs font-semibold px-4 py-2 rounded-xl hover:bg-blue-700 transition"
+          className="bg-indigo-600 text-white text-xs font-semibold px-4 py-2 rounded-xl hover:bg-indigo-700 transition"
         >
           View Details
         </button>

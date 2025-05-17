@@ -1,28 +1,27 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { FaArrowUp } from "react-icons/fa";
 import { AuthContext } from "../../../providers/AuthProvider";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const FeaturedProducts = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const axiosSecure = useAxiosSecure();
 
-  // Fetch featured products
   const { data: products = [], isLoading } = useQuery({
     queryKey: ["featured-products"],
     queryFn: async () => {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/featuredProducts`);
+      const res = await axiosSecure.get("/featuredProducts");
       return res.data;
     },
   });
 
-  // Upvote mutation
   const upvoteMutation = useMutation({
     mutationFn: async (productId) => {
-      await axios.patch(`${import.meta.env.VITE_API_URL}/products/upvote/${productId}`, {
+      await axiosSecure.patch(`/products/upvote/${productId}`, {
         userId: user._id,
       });
     },
@@ -43,7 +42,8 @@ const FeaturedProducts = () => {
 
   return (
     <section className="px-4 md:px-10 my-12">
-      <h2 className="text-3xl font-bold mb-8 text-center text-[#1A2238]">⭐ Featured Products</h2>
+      <h2 className="text-4xl font-bold mb-4 text-center text-indigo-700"> Featured Products</h2>
+      <p className="text-center text-gray-600 mb-12">Explore our handpicked favorites — the most loved, top-rated products on Nexsy, curated just for you!</p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {products.map((product) => {
@@ -61,7 +61,7 @@ const FeaturedProducts = () => {
                 className="w-full h-40 object-cover rounded-xl mb-3"
               />
               <h3
-                className="text-xl font-semibold text-[#0F172A] hover:text-[#2563EB] cursor-pointer transition"
+                className="text-xl font-semibold text-[#0F172A] hover:text-indigo-700 cursor-pointer transition"
                 onClick={() => navigate(`/product/${product._id}`)}
               >
                 {product.productName}

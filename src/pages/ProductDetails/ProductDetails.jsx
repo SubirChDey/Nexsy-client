@@ -235,7 +235,7 @@ const ProductDetails = () => {
             <label className="block text-gray-700 font-medium mb-1">Rating</label>
             <Rating count={5} size={30} activeColor="#ffd700" value={rating} onChange={setRating} />
           </div>
-          <button type="submit" className="bg-green-500 hover:bg-green-600 text-white font-medium px-6 py-2 rounded-lg transition hover:scale-105">
+          <button type="submit" className="bg-indigo-500 hover:bg-indigo-700 text-white font-medium px-6 py-2 rounded-lg transition hover:scale-105">
             Submit Review
           </button>
         </form>

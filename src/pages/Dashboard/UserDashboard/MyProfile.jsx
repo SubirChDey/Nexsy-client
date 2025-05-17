@@ -41,11 +41,9 @@ const MyProfile = () => {
 
   const validateCoupon = async () => {
     if (!coupon) return;
-
     try {
       const res = await axiosSecure.get(`/coupons/validate?code=${coupon}`);
       const data = res.data;
-
       if (!data?.valid) {
         setCouponError("Invalid or expired coupon code.");
         setDiscount(0);
@@ -53,8 +51,7 @@ const MyProfile = () => {
       } else {
         setCouponError("");
         setDiscount(data.discount);
-        const discountedPrice = Math.max(0, 199 - data.discount);
-        setFinalAmount(discountedPrice);
+        setFinalAmount(Math.max(0, 199 - data.discount));
       }
     } catch (error) {
       setCouponError("Error validating coupon.");
@@ -63,30 +60,30 @@ const MyProfile = () => {
     }
   };
 
-const handlePaymentSuccess = async () => {
-  await axiosSecure.patch(`/user/subscribe?email=${user.email}`);
-  setShowPaymentModal(false);
-  refetch();
-  Swal.fire({
-    icon: "success",
-    title: "Subscription Successful!",
-    text: "Thank you for subscribing. Your profile is now verified.",
-    confirmButtonColor: "#3085d6",
-  });
-};
-
+  const handlePaymentSuccess = async () => {
+    await axiosSecure.patch(`/user/subscribe?email=${user.email}`);
+    setShowPaymentModal(false);
+    refetch();
+    Swal.fire({
+      icon: "success",
+      title: "Subscription Successful!",
+      text: "Thank you for subscribing. Your profile is now verified.",
+      confirmButtonColor: "#4f46e5", // indigo-600
+    });
+  };
 
   if (loading || isLoading) return <p className="text-center py-10">Loading...</p>;
 
   return (
-    <div className="w-11/12 md:w-9/12 mx-auto mt-10 px-6 py-10 bg-gradient-to-b from-white to-blue-50 rounded-xl shadow-lg">
-      <h1 className="text-4xl font-bold text-center mb-10 text-blue-700">My Profile</h1>
+    <div className="w-11/12 md:w-9/12 mx-auto mt-10 px-6 py-10 bg-gradient-to-b from-white to-indigo-50 rounded-xl shadow-lg">
+      <h1 className="text-4xl font-bold text-center mb-10 text-indigo-700">My Profile</h1>
+
       <div className="flex flex-col md:flex-row items-center justify-between gap-10">
         <div className="w-full md:w-1/2 flex justify-center">
           <img
             src={profile?.photo}
             alt={profile?.name}
-            className="w-72 h-72 object-cover rounded-xl border-4 border-blue-400 shadow-md"
+            className="w-72 h-72 object-cover rounded-xl border-4 border-indigo-400 shadow-md"
           />
         </div>
 
@@ -97,7 +94,11 @@ const handlePaymentSuccess = async () => {
           <p className="text-gray-600 text-lg">{profile.email}</p>
           <p className="text-lg">
             Status:{" "}
-            <span className={`font-semibold ${profile.isSubscribed ? "text-green-600" : "text-red-500"}`}>
+            <span
+              className={`font-semibold ${
+                profile.isSubscribed ? "text-green-600" : "text-red-500"
+              }`}
+            >
               {profile.isSubscribed ? "Verified" : "Not Verified"}
             </span>
           </p>
@@ -105,7 +106,9 @@ const handlePaymentSuccess = async () => {
           <button
             onClick={handleSubscribeClick}
             className={`mt-4 inline-block ${
-              profile.isSubscribed ? "bg-green-500 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+              profile.isSubscribed
+                ? "bg-green-500 cursor-not-allowed"
+                : "bg-indigo-600 hover:bg-indigo-700"
             } text-white font-medium px-6 py-2 rounded-lg transition`}
             disabled={profile.isSubscribed}
           >
@@ -123,7 +126,7 @@ const handlePaymentSuccess = async () => {
             >
               &times;
             </button>
-            <h3 className="text-2xl font-bold mb-4 text-blue-700">Complete Your Subscription</h3>
+            <h3 className="text-2xl font-bold mb-4 text-indigo-700">Complete Your Subscription</h3>
             <p className="mb-4 text-gray-700">
               Pay <strong>${finalAmount}</strong> to get verified access.
             </p>
@@ -132,7 +135,7 @@ const handlePaymentSuccess = async () => {
               <input
                 type="text"
                 placeholder="Enter Coupon Code (optional)"
-                className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring focus:ring-blue-300 disabled:bg-gray-100"
+                className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring focus:ring-indigo-300 disabled:bg-gray-100"
                 value={coupon}
                 onChange={(e) => setCoupon(e.target.value)}
                 disabled={discount > 0}
@@ -156,7 +159,9 @@ const handlePaymentSuccess = async () => {
                 onClick={validateCoupon}
                 disabled={discount > 0}
                 className={`mt-2 w-full ${
-                  discount > 0 ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600"
+                  discount > 0
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-indigo-500 hover:bg-indigo-600"
                 } text-white py-2 rounded transition`}
               >
                 Apply Coupon

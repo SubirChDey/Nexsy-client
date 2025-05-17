@@ -17,6 +17,7 @@ import MyProfile from "../pages/Dashboard/UserDashboard/MyProfile";
 import ProductDetails from "../pages/ProductDetails/ProductDetails";
 import UpdateProduct from "../pages/Dashboard/UserDashboard/UpdateProduct";
 import PrivateRoute from "./PrivateRoute";
+import Contact from "../pages/Contact/Contact";
 
 
 const router = createBrowserRouter([
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
         {
             path: '/products',
             element: <Products></Products>
+        },
+        {
+            path: '/contact',
+            element: <Contact></Contact>
         },
         {
             path: '/product/:id',
