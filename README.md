@@ -1,6 +1,6 @@
 # Nexsy
 
-**Live Site:** [https://nexsy.web.app](https://nexsy.netlify.app/)
+**Live Site:** [https://nexsy.netlify.app/](https://nexsy.netlify.app/)
 
 Nexsy is a sleek, modern platform built using the MERN stack, designed to showcase and discover the latest tech products and innovations. It offers a smooth user experience with powerful features for both creators and tech enthusiasts.
 
@@ -20,7 +20,7 @@ Nexsy is a sleek, modern platform built using the MERN stack, designed to showca
 - **Frontend**: React.js, Tailwind CSS, React Router, React Query
 - **Backend**: Node.js, Express.js, MongoDB
 - **Authentication**: Firebase Auth
-- **Deployment**: Vercel (frontend), Render (backend)
+- **Deployment**: Netlify (frontend), Vercel (backend)
 
 ## 📁 Project Structure
 
