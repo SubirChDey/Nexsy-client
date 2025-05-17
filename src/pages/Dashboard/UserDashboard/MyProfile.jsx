@@ -6,13 +6,15 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import CheckoutForm from "../Payments/CheckoutForm";
 
-
 const MyProfile = () => {
   const { user, loading } = useContext(AuthContext);
   const axiosSecure = useAxiosSecure();
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [coupon, setCoupon] = useState("");
-  const subscriptionAmount = 199;
+  const [discount, setDiscount] = useState(0);
+  const [couponError, setCouponError] = useState("");
+  const [finalAmount, setFinalAmount] = useState(199);
+
   const stripePromise = loadStripe(import.meta.env.VITE_Payment_Gateway_PK);
 
   const {
@@ -30,6 +32,34 @@ const MyProfile = () => {
 
   const handleSubscribeClick = () => {
     setShowPaymentModal(true);
+    setCoupon("");
+    setDiscount(0);
+    setFinalAmount(199);
+    setCouponError("");
+  };
+
+  const validateCoupon = async () => {
+    if (!coupon) return;
+
+    try {
+      const res = await axiosSecure.get(`/coupons/validate?code=${coupon}`);
+      const data = res.data;
+
+      if (!data?.valid) {
+        setCouponError("Invalid or expired coupon code.");
+        setDiscount(0);
+        setFinalAmount(199);
+      } else {
+        setCouponError("");
+        setDiscount(data.discount);
+        const discountedPrice = Math.max(0, 199 - data.discount);
+        setFinalAmount(discountedPrice);
+      }
+    } catch (error) {
+      setCouponError("Error validating coupon.");
+      setDiscount(0);
+      setFinalAmount(199);
+    }
   };
 
   const handlePaymentSuccess = async () => {
@@ -59,10 +89,7 @@ const MyProfile = () => {
           <p className="text-gray-600 text-lg">{profile.email}</p>
           <p className="text-lg">
             Status:{" "}
-            <span
-              className={`font-semibold ${profile.isSubscribed ? "text-green-600" : "text-red-500"
-                }`}
-            >
+            <span className={`font-semibold ${profile.isSubscribed ? "text-green-600" : "text-red-500"}`}>
               {profile.isSubscribed ? "Verified" : "Not Verified"}
             </span>
           </p>
@@ -71,9 +98,8 @@ const MyProfile = () => {
             onClick={handleSubscribeClick}
             className="mt-4 inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2 rounded-lg transition"
           >
-            Subscribe - ${subscriptionAmount}
+            Subscribe - $199
           </button>
-
         </div>
       </div>
 
@@ -87,27 +113,34 @@ const MyProfile = () => {
               &times;
             </button>
             <h3 className="text-2xl font-bold mb-4 text-blue-700">Complete Your Subscription</h3>
-            <p className="mb-4 text-gray-700">Pay <strong>${subscriptionAmount}</strong> to get verified access.</p>
+            <p className="mb-4 text-gray-700">
+              Pay <strong>${finalAmount}</strong> to get verified access.
+            </p>
 
-            {/* Coupon Input */}
-            <input
-              type="text"
-              placeholder="Enter Coupon Code (optional)"
-              className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring focus:ring-blue-300 mb-4"
-              value={coupon}
-              onChange={(e) => setCoupon(e.target.value)}
-            />
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Enter Coupon Code (optional)"
+                className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring focus:ring-blue-300"
+                value={coupon}
+                onChange={(e) => setCoupon(e.target.value)}
+              />
+              <button
+                onClick={validateCoupon}
+                className="mt-2 w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded transition"
+              >
+                Apply Coupon
+              </button>
+              {couponError && <p className="text-red-500 mt-2">{couponError}</p>}
+              {discount > 0 && (
+                <p className="text-green-600 mt-2">Coupon applied! You saved ${discount}.</p>
+              )}
+            </div>
 
-            {/* <button
-              onClick={handlePaymentSuccess}
-              className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded font-medium transition"
-            >
-              Simulate Payment Success
-            </button> */}
             <Elements stripe={stripePromise}>
               <CheckoutForm
                 email={user.email}
-                amount={subscriptionAmount}
+                amount={finalAmount}
                 coupon={coupon}
                 onSuccess={handlePaymentSuccess}
               />
